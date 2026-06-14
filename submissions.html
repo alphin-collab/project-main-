@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submissions – MainCrafts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #12121a;
+      --border:   rgba(255,255,255,0.07);
+      --accent1:  #7b5cf0;
+      --accent2:  #f05c7b;
+      --accent3:  #22d3ee;
+      --text:     #e8e6f0;
+      --muted:    #7a7890;
+      --font-head:'Syne', sans-serif;
+      --font-body:'DM Sans', sans-serif;
+      --radius:   14px;
+      --nav-h:    72px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:16px; line-height:1.7; overflow-x:hidden; }
+    a { color:inherit; text-decoration:none; }
+
+    body::before {
+      content:''; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity:0.028; pointer-events:none; z-index:9999;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; height:var(--nav-h);
+      display:flex; align-items:center; padding:0 clamp(1.5rem,5vw,4rem);
+      background:rgba(10,10,15,0.72); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border); z-index:1000; transition:background .3s;
+    }
+    .nav-logo {
+      font-family:var(--font-head); font-weight:800; font-size:1.4rem; letter-spacing:-.03em;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; flex-shrink:0;
+    }
+    .nav-links { display:flex; align-items:center; list-style:none; gap:.25rem; margin-left:auto; }
+    .nav-links > li { position:relative; }
+    .nav-links > li > a { display:block; padding:.5rem 1rem; font-size:.9rem; font-weight:500; color:var(--muted); border-radius:8px; transition:color .2s,background .2s; }
+    .nav-links > li > a:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+    .nav-links > li > a.active { color:var(--accent1) !important; }
+    .dropdown-menu { position:absolute; top:calc(100% + 8px); left:50%; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); min-width:200px; padding:.5rem; opacity:0; visibility:hidden; transform:translateX(-50%) translateY(-6px); transition:opacity .22s,transform .22s,visibility .22s; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+    .has-dropdown:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+    .dropdown-menu a { display:flex; align-items:center; gap:.65rem; padding:.6rem .9rem; font-size:.875rem; border-radius:8px; color:var(--muted); transition:color .2s,background .2s; }
+    .dropdown-menu a i { width:16px; color:var(--accent1); }
+    .dropdown-menu a:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+    .dropdown-arrow { font-size:.65rem; margin-left:3px; }
+    .nav-cta { margin-left:1.25rem; padding:.55rem 1.25rem; background:linear-gradient(135deg,var(--accent1),var(--accent2)); border-radius:50px; font-size:.875rem; font-weight:600; font-family:var(--font-head); color:#fff !important; transition:opacity .2s,transform .2s; }
+    .nav-cta:hover { opacity:.88; transform:translateY(-1px); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; margin-left:auto; padding:6px; background:none; border:none; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--text); border-radius:2px; transition:transform .3s,opacity .3s; }
+
+    /* ── Page Hero ── */
+    .page-hero {
+      min-height:48vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center;
+      padding:calc(var(--nav-h) + 4rem) clamp(1.5rem,5vw,4rem) 4rem;
+      position:relative; overflow:hidden;
+    }
+    .page-hero::before {
+      content:''; position:absolute; inset:-50%;
+      background:
+        radial-gradient(ellipse 60% 55% at 25% 45%, rgba(123,92,240,0.20) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 45% at 75% 55%, rgba(34,211,238,0.14) 0%, transparent 65%);
+      animation:meshDrift 20s ease-in-out infinite alternate;
+    }
+    .page-hero::after {
+      content:''; position:absolute; inset:0;
+      background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+      background-size:60px 60px; pointer-events:none;
+    }
+    @keyframes meshDrift { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(3%,2%) rotate(2deg)} 100%{transform:translate(-2%,4%) rotate(-2deg)} }
+    .page-hero > * { position:relative; z-index:1; }
+    .hero-badge { display:inline-flex; align-items:center; gap:.5rem; padding:.35rem 1rem; border:1px solid rgba(123,92,240,0.35); border-radius:50px; background:rgba(123,92,240,0.08); font-size:.8rem; font-weight:500; color:var(--accent1); margin-bottom:1.8rem; animation:fadeUp .8s ease both; }
+    .page-hero h1 { font-family:var(--font-head); font-size:clamp(2.6rem,7vw,5rem); font-weight:800; line-height:1.06; letter-spacing:-.04em; animation:fadeUp .8s .1s ease both; }
+    .grad { background:linear-gradient(135deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .page-hero p { margin-top:1.4rem; color:var(--muted); font-size:clamp(.95rem,2vw,1.1rem); max-width:50ch; margin-left:auto; margin-right:auto; animation:fadeUp .8s .2s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── Main content ── */
+    #submissions-main { padding:3rem clamp(1.5rem,5vw,4rem) 6rem; max-width:1000px; margin:0 auto; }
+
+    /* Stats bar */
+    .stats-bar {
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.2rem 1.8rem; margin-bottom:2rem;
+    }
+    .stats-bar-left { display:flex; align-items:center; gap:.8rem; }
+    .stat-pill { display:inline-flex; align-items:center; gap:.4rem; padding:.3rem .85rem; background:rgba(123,92,240,0.12); border:1px solid rgba(123,92,240,0.25); border-radius:50px; font-size:.82rem; font-weight:600; color:var(--accent1); }
+    .stats-bar-right { display:flex; gap:.75rem; }
+
+    /* Action buttons */
+    .btn-sm {
+      display:inline-flex; align-items:center; gap:.4rem;
+      padding:.45rem 1rem; border-radius:50px;
+      font-family:var(--font-head); font-weight:600; font-size:.8rem;
+      cursor:pointer; border:none; transition:transform .2s, opacity .2s, box-shadow .2s;
+    }
+    .btn-sm.primary { background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:#fff; box-shadow:0 4px 16px rgba(123,92,240,0.3); }
+    .btn-sm.primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(123,92,240,0.45); }
+    .btn-sm.danger  { background:rgba(240,92,123,0.12); color:var(--accent2); border:1px solid rgba(240,92,123,0.25); }
+    .btn-sm.danger:hover  { background:rgba(240,92,123,0.2); }
+    .btn-sm.ghost   { background:rgba(255,255,255,0.04); color:var(--muted); border:1px solid var(--border); }
+    .btn-sm.ghost:hover   { background:rgba(255,255,255,0.08); color:var(--text); }
+
+    /* Empty state */
+    .empty-state {
+      text-align:center; padding:5rem 2rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px;
+    }
+    .empty-icon { font-size:3rem; color:var(--muted); margin-bottom:1.2rem; }
+    .empty-state h3 { font-family:var(--font-head); font-size:1.3rem; font-weight:800; margin-bottom:.5rem; }
+    .empty-state p { color:var(--muted); font-size:.95rem; max-width:40ch; margin:0 auto 1.5rem; }
+
+    /* Submission cards */
+    .submissions-list { display:flex; flex-direction:column; gap:1.2rem; }
+    .sub-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.8rem 2rem;
+      position:relative; overflow:hidden;
+      transition:border-color .3s, transform .3s, box-shadow .3s;
+      animation:slideIn .4s ease both;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .sub-card::before {
+      content:''; position:absolute; top:0; left:0; bottom:0; width:3px;
+      background:linear-gradient(to bottom,var(--accent1),var(--accent2));
+    }
+    .sub-card:hover { border-color:rgba(123,92,240,0.28); transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+
+    .sub-header { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .sub-avatar {
+      width:44px; height:44px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-head); font-size:1rem; font-weight:800;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      color:#fff; flex-shrink:0;
+    }
+    .sub-identity { flex:1; }
+    .sub-identity strong { display:block; font-family:var(--font-head); font-weight:700; font-size:1rem; }
+    .sub-identity span { font-size:.83rem; color:var(--accent1); }
+    .sub-meta { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
+    .sub-date { font-size:.77rem; color:var(--muted); display:flex; align-items:center; gap:.3rem; }
+    .sub-service {
+      font-size:.75rem; font-weight:600; padding:.2rem .7rem;
+      background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.2);
+      border-radius:50px; color:var(--accent3);
+    }
+
+    .sub-body { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+    .sub-field label { font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+    .sub-field p { font-size:.9rem; color:var(--text); }
+
+    .sub-message { grid-column:1/-1; }
+    .sub-message p { font-size:.9rem; color:var(--muted); line-height:1.7; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:.8rem 1rem; }
+
+    .sub-actions { display:flex; justify-content:flex-end; gap:.5rem; margin-top:.5rem; }
+
+    /* Confirm delete modal */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
+      z-index:2000; align-items:center; justify-content:center;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:2.5rem; max-width:420px; width:90%;
+      text-align:center; animation:fadeUp .3s ease;
+    }
+    .modal i { font-size:2.5rem; color:var(--accent2); margin-bottom:1rem; }
+    .modal h3 { font-family:var(--font-head); font-weight:800; font-size:1.2rem; margin-bottom:.5rem; }
+    .modal p { color:var(--muted); font-size:.9rem; margin-bottom:1.5rem; }
+    .modal-btns { display:flex; gap:.75rem; justify-content:center; }
+
+    /* Footer */
+    footer { border-top:1px solid var(--border); padding:2.5rem clamp(1.5rem,5vw,4rem); display:flex; flex-wrap:wrap; align-items:center; gap:1rem; justify-content:space-between; }
+    .footer-logo { font-family:var(--font-head); font-weight:800; font-size:1.1rem; background:linear-gradient(135deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .footer-copy { font-size:.82rem; color:var(--muted); }
+    .footer-links { display:flex; gap:1.5rem; list-style:none; }
+    .footer-links a { font-size:.82rem; color:var(--muted); transition:color .2s; }
+    .footer-links a:hover { color:var(--text); }
+
+    /* Responsive */
+    @media (max-width:680px) {
+      .nav-links { display:none; flex-direction:column; position:fixed; top:var(--nav-h); left:0; right:0; bottom:0; background:rgba(10,10,15,0.97); padding:2rem; gap:.5rem; overflow-y:auto; }
+      .nav-links.open { display:flex; }
+      .nav-links > li > a { font-size:1.15rem; padding:.75rem 1rem; color:var(--text); }
+      .dropdown-menu { position:static; opacity:1; visibility:visible; transform:none; background:rgba(255,255,255,0.04); box-shadow:none; margin-top:.25rem; }
+      .nav-cta { margin-left:0; width:100%; text-align:center; margin-top:1rem; }
+      .hamburger { display:flex; }
+      .sub-body { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">MainCrafts</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li class="has-dropdown">
+      <a href="index.html#services">Services <i class="fa fa-chevron-down dropdown-arrow"></i></a>
+      <ul class="dropdown-menu">
+        <li><a href="index.html#services"><i class="fa fa-code"></i> Web Development</a></li>
+        <li><a href="index.html#services"><i class="fa fa-mobile-screen"></i> Mobile Apps</a></li>
+        <li><a href="index.html#services"><i class="fa fa-palette"></i> UI/UX Design</a></li>
+        <li><a href="index.html#services"><i class="fa fa-chart-line"></i> Growth Strategy</a></li>
+        <li><a href="index.html#services"><i class="fa fa-cloud"></i> Cloud & DevOps</a></li>
+      </ul>
+    </li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="submissions.html" class="active">Submissions</a></li>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-badge"><i class="fa fa-list-check"></i> Form Data</div>
+  <h1>Contact <span class="grad">Submissions</span></h1>
+  <p>All messages sent through the contact form are saved locally in your browser and displayed here.</p>
+</div>
+
+<!-- MAIN -->
+<section id="submissions-main">
+
+  <!-- Stats bar -->
+  <div class="stats-bar" id="statsBar" style="display:none">
+    <div class="stats-bar-left">
+      <i class="fa fa-database" style="color:var(--accent1)"></i>
+      <span style="font-family:var(--font-head);font-weight:700;">All Submissions</span>
+      <span class="stat-pill" id="countPill"><i class="fa fa-inbox"></i> <span id="subCount">0</span> entries</span>
+    </div>
+    <div class="stats-bar-right">
+      <a href="contact.html" class="btn-sm primary"><i class="fa fa-plus"></i> New Submission</a>
+      <button class="btn-sm danger" id="clearAllBtn"><i class="fa fa-trash"></i> Clear All</button>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div id="subList"></div>
+
+</section>
+
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <i class="fa fa-triangle-exclamation"></i>
+    <h3>Delete this submission?</h3>
+    <p>This action cannot be undone. The entry will be permanently removed from your browser.</p>
+    <div class="modal-btns">
+      <button class="btn-sm ghost" id="cancelDelete">Cancel</button>
+      <button class="btn-sm danger" id="confirmDelete"><i class="fa fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">MainCrafts</div>
+    <div class="footer-copy">© 2025 MainCrafts. All rights reserved.</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Terms of Use</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  /* ── Nav ── */
+  const ham  = document.getElementById('hamburger');
+  const navEl = document.getElementById('navLinks');
+  ham.addEventListener('click', () => {
+    navEl.classList.toggle('open');
+    const s = ham.querySelectorAll('span');
+    if (navEl.classList.contains('open')) {
+      s[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+      s[1].style.opacity = '0';
+      s[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+    } else { s[0].style.transform = s[2].style.transform = ''; s[1].style.opacity = ''; }
+  });
+  navEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navEl.classList.remove('open');
+    ham.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }));
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.background =
+      window.scrollY > 30 ? 'rgba(10,10,15,0.95)' : 'rgba(10,10,15,0.72)';
+  });
+
+  /* ── LocalStorage helpers ── */
+  function getSubmissions() {
+    return JSON.parse(localStorage.getItem('mc_submissions') || '[]');
+  }
+  function saveSubmissions(data) {
+    localStorage.setItem('mc_submissions', JSON.stringify(data));
+  }
+
+  /* ── Render ── */
+  function getInitials(name) {
+    return name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  }
+  const gradients = [
+    'linear-gradient(135deg,#7b5cf0,#f05c7b)',
+    'linear-gradient(135deg,#f05c7b,#f9a825)',
+    'linear-gradient(135deg,#22d3ee,#7b5cf0)',
+    'linear-gradient(135deg,#ffc850,#f05c7b)',
+  ];
+
+  function render() {
+    const data = getSubmissions();
+    const list = document.getElementById('subList');
+    const statsBar = document.getElementById('statsBar');
+    document.getElementById('subCount').textContent = data.length;
+
+    if (data.length === 0) {
+      statsBar.style.display = 'none';
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fa fa-inbox"></i></div>
+          <h3>No submissions yet</h3>
+          <p>Once someone fills out the contact form, their message will appear here.</p>
+          <a href="contact.html" class="btn-sm primary" style="display:inline-flex;margin-top:.5rem">
+            <i class="fa fa-paper-plane"></i> Send a Message
+          </a>
+        </div>`;
+      return;
+    }
+
+    statsBar.style.display = 'flex';
+    list.innerHTML = data.map((s, i) => `
+      <div class="sub-card" data-id="${s.id}" style="animation-delay:${i * 0.06}s">
+        <div class="sub-header">
+          <div style="display:flex;align-items:center;gap:.9rem;flex:1">
+            <div class="sub-avatar" style="background:${gradients[i % gradients.length]}">${getInitials(s.name)}</div>
+            <div class="sub-identity">
+              <strong>${escHtml(s.name)}</strong>
+              <span>${escHtml(s.email)}</span>
+            </div>
+          </div>
+          <div class="sub-meta">
+            ${s.service && s.service !== 'Not specified' ? `<span class="sub-service"><i class="fa fa-tag"></i> ${escHtml(s.service)}</span>` : ''}
+            <span class="sub-date"><i class="fa fa-clock"></i> ${escHtml(s.date)}</span>
+          </div>
+        </div>
+        <div class="sub-body">
+          <div class="sub-field">
+            <label><i class="fa fa-user"></i> Full Name</label>
+            <p>${escHtml(s.name)}</p>
+          </div>
+          <div class="sub-field">
+            <label><i class="fa fa-envelope"></i> Email Address</label>
+            <p>${escHtml(s.email)}</p>
+          </div>
+          <div class="sub-field sub-message">
+            <label><i class="fa fa-message"></i> Message</label>
+            <p>${escHtml(s.message)}</p>
+          </div>
+        </div>
+        <div class="sub-actions">
+          <button class="btn-sm danger delete-btn" data-id="${s.id}"><i class="fa fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join('');
+
+    /* Attach delete handlers */
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => openDeleteModal(Number(btn.dataset.id)));
+    });
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  /* ── Delete single ── */
+  let pendingDeleteId = null;
+  function openDeleteModal(id) {
+    pendingDeleteId = id;
+    document.getElementById('deleteModal').classList.add('open');
+  }
+  document.getElementById('cancelDelete').addEventListener('click', () => {
+    document.getElementById('deleteModal').classList.remove('open');
+    pendingDeleteId = null;
+  });
+  document.getElementById('confirmDelete').addEventListener('click', () => {
+    if (pendingDeleteId !== null) {
+      const updated = getSubmissions().filter(s => s.id !== pendingDeleteId);
+      saveSubmissions(updated);
+      render();
+    }
+    document.getElementById('deleteModal').classList.remove('open');
+    pendingDeleteId = null;
+  });
+
+  /* ── Clear all ── */
+  document.getElementById('clearAllBtn').addEventListener('click', () => {
+    if (confirm('Delete ALL submissions? This cannot be undone.')) {
+      localStorage.removeItem('mc_submissions');
+      render();
+    }
+  });
+
+  /* ── Close modal on overlay click ── */
+  document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+      pendingDeleteId = null;
+    }
+  });
+
+  /* ── Init ── */
+  render();
+</script>
+</body>
+</html>

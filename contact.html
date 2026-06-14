@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact – MainCrafts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ─── CSS Variables (identical to Task 1) ─────────── */
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #12121a;
+      --border:   rgba(255,255,255,0.07);
+      --accent1:  #7b5cf0;
+      --accent2:  #f05c7b;
+      --accent3:  #22d3ee;
+      --text:     #e8e6f0;
+      --muted:    #7a7890;
+      --font-head:'Syne', sans-serif;
+      --font-body:'DM Sans', sans-serif;
+      --radius:   14px;
+      --nav-h:    72px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font-body); font-size: 16px;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028; pointer-events: none; z-index: 9999;
+    }
+
+    /* ─── Nav (identical to Task 1) ──────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h); display: flex; align-items: center;
+      padding: 0 clamp(1.5rem,5vw,4rem);
+      background: rgba(10,10,15,0.72);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000; transition: background 0.3s;
+    }
+    .nav-logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 1.4rem;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg,var(--accent1),var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      flex-shrink: 0;
+    }
+    .nav-links { display:flex; align-items:center; list-style:none; gap:.25rem; margin-left:auto; }
+    .nav-links > li { position: relative; }
+    .nav-links > li > a {
+      display:block; padding:.5rem 1rem; font-size:.9rem; font-weight:500;
+      color:var(--muted); border-radius:8px; transition:color .2s,background .2s;
+    }
+    .nav-links > li > a:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+    .nav-links > li > a.active { color:var(--accent1) !important; }
+    .dropdown-menu {
+      position:absolute; top:calc(100% + 8px); left:50%;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); min-width:200px; padding:.5rem;
+      opacity:0; visibility:hidden;
+      transform:translateX(-50%) translateY(-6px);
+      transition:opacity .22s,transform .22s,visibility .22s;
+      box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    }
+    .has-dropdown:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+    .dropdown-menu a { display:flex; align-items:center; gap:.65rem; padding:.6rem .9rem; font-size:.875rem; border-radius:8px; color:var(--muted); transition:color .2s,background .2s; }
+    .dropdown-menu a i { width:16px; color:var(--accent1); }
+    .dropdown-menu a:hover { color:var(--text); background:rgba(255,255,255,0.05); }
+    .dropdown-arrow { font-size:.65rem; margin-left:3px; }
+    .nav-cta {
+      margin-left:1.25rem; padding:.55rem 1.25rem;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      border-radius:50px; font-size:.875rem; font-weight:600;
+      font-family:var(--font-head); color:#fff !important;
+      transition:opacity .2s,transform .2s;
+    }
+    .nav-cta:hover { opacity:.88; transform:translateY(-1px); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; margin-left:auto; padding:6px; background:none; border:none; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--text); border-radius:2px; transition:transform .3s,opacity .3s; }
+
+    /* ─── Page Hero ───────────────────────────────────── */
+    .page-hero {
+      min-height: 50vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center;
+      padding:calc(var(--nav-h) + 4rem) clamp(1.5rem,5vw,4rem) 5rem;
+      position:relative; overflow:hidden;
+    }
+    .page-hero::before {
+      content:''; position:absolute; inset:-50%;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(240,92,123,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 78% 48%, rgba(123,92,240,0.18) 0%, transparent 65%);
+      animation:meshDrift 20s ease-in-out infinite alternate;
+    }
+    .page-hero::after {
+      content:''; position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+      background-size:60px 60px; pointer-events:none;
+    }
+    @keyframes meshDrift {
+      0%   { transform:translate(0,0) rotate(0deg); }
+      50%  { transform:translate(3%,2%) rotate(2deg); }
+      100% { transform:translate(-2%,4%) rotate(-2deg); }
+    }
+    .page-hero > * { position:relative; z-index:1; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.35rem 1rem; border:1px solid rgba(123,92,240,0.35);
+      border-radius:50px; background:rgba(123,92,240,0.08);
+      font-size:.8rem; font-weight:500; color:var(--accent1);
+      margin-bottom:1.8rem; animation:fadeUp .8s ease both;
+    }
+    .page-hero h1 {
+      font-family:var(--font-head);
+      font-size:clamp(2.6rem,7vw,5rem);
+      font-weight:800; line-height:1.06; letter-spacing:-.04em;
+      animation:fadeUp .8s .1s ease both;
+    }
+    .grad {
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .page-hero p { margin-top:1.4rem; color:var(--muted); font-size:clamp(.95rem,2vw,1.1rem); max-width:50ch; margin-left:auto; margin-right:auto; animation:fadeUp .8s .2s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ─── Section helpers ─────────────────────────────── */
+    section { padding:5rem clamp(1.5rem,5vw,4rem); }
+    .section-label { display:inline-block; font-size:.75rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent1); margin-bottom:1rem; }
+    .section-h2 { font-family:var(--font-head); font-size:clamp(2rem,4.5vw,3rem); font-weight:800; line-height:1.1; letter-spacing:-.03em; }
+    .section-sub { margin-top:1rem; color:var(--muted); font-size:1.05rem; max-width:55ch; }
+    .section-header { max-width:700px; margin:0 auto 3.5rem; text-align:center; }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+    .reveal.in-view { opacity:1; transform:none; }
+
+    /* ─── Contact grid ────────────────────────────────── */
+    #contact-main { padding:5rem clamp(1.5rem,5vw,4rem); }
+    .contact-grid {
+      display:grid; grid-template-columns:1fr 1.6fr;
+      gap:3rem; max-width:1100px; margin:0 auto; align-items:start;
+    }
+
+    /* Info cards (same style as Task 1 contact-card) */
+    .info-panel h2 { font-family:var(--font-head); font-size:1.5rem; font-weight:800; line-height:1.2; letter-spacing:-.02em; margin-bottom:.5rem; }
+    .info-panel > p { color:var(--muted); font-size:.95rem; line-height:1.8; margin-bottom:2rem; }
+    .info-items { display:flex; flex-direction:column; gap:1rem; }
+    .info-item {
+      display:flex; align-items:flex-start; gap:1rem;
+      padding:1.3rem 1.5rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--radius); transition:border-color .2s;
+    }
+    .info-item:hover { border-color:rgba(123,92,240,0.3); }
+    .info-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .info-icon.v { background:rgba(123,92,240,0.12); color:var(--accent1); }
+    .info-icon.p { background:rgba(240,92,123,0.12); color:var(--accent2); }
+    .info-icon.c { background:rgba(34,211,238,0.12);  color:var(--accent3); }
+    .info-icon.g { background:rgba(255,200,80,0.12);  color:#ffc850; }
+    .info-item strong { display:block; font-family:var(--font-head); font-weight:700; font-size:.92rem; margin-bottom:.15rem; }
+    .info-item span { font-size:.85rem; color:var(--muted); }
+    .info-item a { font-size:.85rem; color:var(--accent1); transition:opacity .2s; }
+    .info-item a:hover { opacity:.75; }
+
+    /* ─── Form panel ──────────────────────────────────── */
+    .form-panel {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:2.8rem;
+    }
+    .form-panel h3 { font-family:var(--font-head); font-size:1.3rem; font-weight:800; margin-bottom:1.8rem; letter-spacing:-.02em; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+    .form-group { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1.2rem; }
+    .form-group label { font-size:.78rem; font-weight:600; color:var(--muted); letter-spacing:.05em; text-transform:uppercase; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background:var(--bg); border:1px solid var(--border);
+      border-radius:10px; color:var(--text);
+      font-family:var(--font-body); font-size:.95rem;
+      padding:.85rem 1.1rem; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+      width:100%;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color:rgba(122,120,144,0.45); }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color:rgba(123,92,240,0.55);
+      box-shadow:0 0 0 3px rgba(123,92,240,0.12);
+    }
+    .form-group select option { background:var(--surface); }
+    .form-group textarea { min-height:130px; resize:none; }
+
+    /* Validation */
+    .input-error { border-color:var(--accent2) !important; box-shadow:0 0 0 3px rgba(240,92,123,0.12) !important; }
+    .field-error { display:none; font-size:.8rem; color:var(--accent2); align-items:center; gap:.3rem; margin-top:-.2rem; }
+    .field-error i { flex-shrink:0; }
+
+    .char-counter { font-size:.75rem; color:var(--muted); text-align:right; margin-top:-.8rem; margin-bottom:.4rem; }
+
+    /* Submit button — same gradient style as Task 1 btn-primary */
+    .submit-btn {
+      width:100%; padding:1rem;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      border:none; border-radius:12px;
+      font-family:var(--font-head); font-weight:700; font-size:1rem;
+      color:#fff; cursor:pointer;
+      transition:transform .2s,box-shadow .2s;
+      box-shadow:0 8px 30px rgba(123,92,240,0.35);
+      display:flex; align-items:center; justify-content:center; gap:.5rem;
+    }
+    .submit-btn:hover { transform:translateY(-2px); box-shadow:0 14px 40px rgba(123,92,240,0.5); }
+
+    /* Success */
+    .form-success { text-align:center; padding:3rem 1rem; }
+    .success-icon { font-size:3rem; color:#22c55e; margin-bottom:1rem; animation:popIn .4s ease; }
+    @keyframes popIn { from{transform:scale(.5);opacity:0} to{transform:scale(1);opacity:1} }
+    .form-success h3 { font-family:var(--font-head); font-size:1.5rem; font-weight:800; margin-bottom:.6rem; }
+    .form-success p { color:var(--muted); }
+
+    /* ─── Contact info cards strip ────────────────────── */
+    #contact-cards { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:4rem clamp(1.5rem,5vw,4rem); }
+    .contact-cards-grid {
+      display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center;
+      max-width:900px; margin:0 auto;
+    }
+    .contact-card {
+      flex:1; min-width:200px;
+      background:var(--bg); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1.8rem 1.5rem;
+      text-align:center; transition:border-color .2s, transform .2s;
+    }
+    .contact-card:hover { border-color:rgba(123,92,240,0.3); transform:translateY(-3px); }
+    .contact-card i { font-size:1.5rem; margin-bottom:.8rem; }
+    .contact-card i.vi { color:var(--accent1); }
+    .contact-card i.pi { color:var(--accent2); }
+    .contact-card i.ci { color:var(--accent3); }
+    .contact-card strong { display:block; font-family:var(--font-head); font-weight:700; margin-bottom:.3rem; }
+    .contact-card span { font-size:.85rem; color:var(--muted); }
+
+    /* ─── Footer ──────────────────────────────────────── */
+    footer { border-top:1px solid var(--border); padding:2.5rem clamp(1.5rem,5vw,4rem); display:flex; flex-wrap:wrap; align-items:center; gap:1rem; justify-content:space-between; }
+    .footer-logo { font-family:var(--font-head); font-weight:800; font-size:1.1rem; background:linear-gradient(135deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .footer-copy { font-size:.82rem; color:var(--muted); }
+    .footer-links { display:flex; gap:1.5rem; list-style:none; }
+    .footer-links a { font-size:.82rem; color:var(--muted); transition:color .2s; }
+    .footer-links a:hover { color:var(--text); }
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media (max-width:820px) {
+      .contact-grid { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; }
+    }
+    @media (max-width:680px) {
+      .nav-links { display:none; flex-direction:column; position:fixed; top:var(--nav-h); left:0; right:0; bottom:0; background:rgba(10,10,15,0.97); padding:2rem; gap:.5rem; overflow-y:auto; }
+      .nav-links.open { display:flex; }
+      .nav-links > li > a { font-size:1.15rem; padding:.75rem 1rem; color:var(--text); }
+      .dropdown-menu { position:static; opacity:1; visibility:visible; transform:none; background:rgba(255,255,255,0.04); box-shadow:none; margin-top:.25rem; }
+      .nav-cta { margin-left:0; width:100%; text-align:center; margin-top:1rem; }
+      .hamburger { display:flex; }
+      .form-panel { padding:1.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">MainCrafts</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li class="has-dropdown">
+      <a href="index.html#services">Services <i class="fa fa-chevron-down dropdown-arrow"></i></a>
+      <ul class="dropdown-menu">
+        <li><a href="index.html#services"><i class="fa fa-code"></i> Web Development</a></li>
+        <li><a href="index.html#services"><i class="fa fa-mobile-screen"></i> Mobile Apps</a></li>
+        <li><a href="index.html#services"><i class="fa fa-palette"></i> UI/UX Design</a></li>
+        <li><a href="index.html#services"><i class="fa fa-chart-line"></i> Growth Strategy</a></li>
+        <li><a href="index.html#services"><i class="fa fa-cloud"></i> Cloud & DevOps</a></li>
+      </ul>
+    </li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><a href="submissions.html">Submissions</a></li>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-badge"><i class="fa fa-envelope"></i> Say Hello</div>
+  <h1>Let's build something <span class="grad">great</span> together</h1>
+  <p>Have a project in mind? Fill in the form and our team will get back to you within 24 hours.</p>
+</div>
+
+<!-- CONTACT CARDS STRIP -->
+<section id="contact-cards">
+  <div class="contact-cards-grid">
+    <div class="contact-card reveal">
+      <i class="fa fa-envelope vi"></i>
+      <strong>Email Us</strong>
+      <span>hr@maincrafts.com</span>
+    </div>
+    <div class="contact-card reveal" style="transition-delay:.08s">
+      <i class="fa fa-globe pi"></i>
+      <strong>Website</strong>
+      <span>www.maincrafts.com</span>
+    </div>
+    <div class="contact-card reveal" style="transition-delay:.16s">
+      <i class="fa fa-headset ci"></i>
+      <strong>Live Support</strong>
+      <span>24/7 Available</span>
+    </div>
+    <div class="contact-card reveal" style="transition-delay:.24s">
+      <i class="fa fa-clock vi"></i>
+      <strong>Response Time</strong>
+      <span>Within 24 hours</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section id="contact-main">
+  <div class="contact-grid">
+
+    <!-- Info Panel -->
+    <div class="info-panel reveal">
+      <span class="section-label">Get In Touch</span>
+      <h2>We'd love to hear from you</h2>
+      <p>Whether you have a question, a project, or just want to say hello — our team is always here and happy to help.</p>
+      <div class="info-items">
+        <div class="info-item">
+          <div class="info-icon v"><i class="fa fa-envelope"></i></div>
+          <div><strong>Email</strong><a href="mailto:hr@maincrafts.com">hr@maincrafts.com</a></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon p"><i class="fa fa-globe"></i></div>
+          <div><strong>Website</strong><a href="https://www.maincrafts.com" target="_blank">www.maincrafts.com</a></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon c"><i class="fa fa-headset"></i></div>
+          <div><strong>Live Support</strong><span>Available 24/7 for urgent queries</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon g"><i class="fa fa-location-dot"></i></div>
+          <div><strong>Headquarters</strong><span>42 Anna Salai, Chennai, India</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Panel -->
+    <div class="form-panel reveal" style="transition-delay:.1s">
+      <h3>Send us a message ✉️</h3>
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" placeholder="e.g. Arjun Kumar"/>
+            <span class="field-error" id="err-name"><i class="fa fa-circle-exclamation"></i> <span class="err-text"></span></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" placeholder="you@example.com"/>
+            <span class="field-error" id="err-email"><i class="fa fa-circle-exclamation"></i> <span class="err-text"></span></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210"/>
+          </div>
+          <div class="form-group">
+            <label for="service">Service Interested In</label>
+            <select id="service">
+              <option value="">— Select a service —</option>
+              <option>Web Development</option>
+              <option>Mobile App</option>
+              <option>UI/UX Design</option>
+              <option>Cloud & DevOps</option>
+              <option>Growth Analytics</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message *</label>
+          <textarea id="message" maxlength="600" placeholder="Tell us about your project, timeline, or any questions…"></textarea>
+          <div class="char-counter"><span id="charCount">0</span> / 600</div>
+          <span class="field-error" id="err-message"><i class="fa fa-circle-exclamation"></i> <span class="err-text"></span></span>
+        </div>
+        <button type="submit" class="submit-btn">
+          <i class="fa fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">MainCrafts</div>
+    <div class="footer-copy">© 2025 MainCrafts. All rights reserved.</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Terms of Use</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  /* ── Nav ── */
+  const ham  = document.getElementById('hamburger');
+  const navEl = document.getElementById('navLinks');
+  ham.addEventListener('click', () => {
+    navEl.classList.toggle('open');
+    const s = ham.querySelectorAll('span');
+    if (navEl.classList.contains('open')) {
+      s[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+      s[1].style.opacity = '0';
+      s[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+    } else { s[0].style.transform = s[2].style.transform = ''; s[1].style.opacity = ''; }
+  });
+  navEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navEl.classList.remove('open');
+    ham.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }));
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.background =
+      window.scrollY > 30 ? 'rgba(10,10,15,0.95)' : 'rgba(10,10,15,0.72)';
+  });
+
+  /* ── Scroll reveal ── */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── Char counter ── */
+  const msgEl   = document.getElementById('message');
+  const counter = document.getElementById('charCount');
+  msgEl.addEventListener('input', () => { counter.textContent = msgEl.value.length; });
+
+  /* ── Form validation + LocalStorage ── */
+  const form = document.getElementById('contactForm');
+
+  function showErr(id, msg) {
+    const wrap = document.getElementById(id);
+    wrap.querySelector('.err-text').textContent = msg;
+    wrap.style.display = msg ? 'flex' : 'none';
+  }
+  function clearAll() {
+    ['err-name','err-email','err-message'].forEach(id => showErr(id, ''));
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+  }
+
+  /* Clear error on typing */
+  form.querySelectorAll('input, textarea').forEach(inp => {
+    inp.addEventListener('input', () => {
+      inp.classList.remove('input-error');
+      const errEl = document.getElementById('err-' + inp.id);
+      if (errEl) showErr('err-' + inp.id, '');
+    });
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    clearAll();
+
+    const nameEl    = document.getElementById('name');
+    const emailEl   = document.getElementById('email');
+    const messageEl = document.getElementById('message');
+    const serviceEl = document.getElementById('service');
+    let valid = true;
+
+    if (!nameEl.value.trim()) {
+      showErr('err-name', 'Please enter your full name.');
+      nameEl.classList.add('input-error'); valid = false;
+    }
+    if (!emailEl.value.trim()) {
+      showErr('err-email', 'Please enter your email address.');
+      emailEl.classList.add('input-error'); valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+      showErr('err-email', 'Please enter a valid email (e.g. you@example.com).');
+      emailEl.classList.add('input-error'); valid = false;
+    }
+    if (!messageEl.value.trim()) {
+      showErr('err-message', 'Please write a message before sending.');
+      messageEl.classList.add('input-error'); valid = false;
+    }
+
+    if (valid) {
+      /* ── Save to LocalStorage ── */
+      const submission = {
+        id:      Date.now(),
+        name:    nameEl.value.trim(),
+        email:   emailEl.value.trim(),
+        service: serviceEl.value || 'Not specified',
+        message: messageEl.value.trim(),
+        date:    new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
+      };
+      const existing = JSON.parse(localStorage.getItem('mc_submissions') || '[]');
+      existing.unshift(submission); /* newest first */
+      localStorage.setItem('mc_submissions', JSON.stringify(existing));
+
+      /* ── Show success state ── */
+      form.innerHTML = `
+        <div class="form-success">
+          <div class="success-icon"><i class="fa fa-circle-check"></i></div>
+          <h3>Message Sent!</h3>
+          <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+          <a href="submissions.html" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;padding:.75rem 1.8rem;background:linear-gradient(135deg,var(--accent1),var(--accent2));border-radius:50px;font-family:var(--font-head);font-weight:700;font-size:.9rem;color:#fff;">
+            <i class="fa fa-list"></i> View All Submissions
+          </a>
+        </div>`;
+    }
+  });
+</script>
+</body>
+</html>
